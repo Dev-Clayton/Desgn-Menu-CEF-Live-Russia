@@ -1,7 +1,7 @@
 # Desgn-Menu-CEF-Live-Russia
 <div align="center">
 
-# 🎮 Design Menu CEF — Live Russia
+# 🎮 Design Menu CEF  Live Russia
 
 ### Interfaces modernas em HTML, CSS e JavaScript para integração com CEF/WebView
 
