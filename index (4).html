@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Acessórios</title>
+<!-- Compatível com CEF / WebView: arquivo único, sem CDN, sem fontes externas, sem localStorage. Layout horizontal que escala com a tela. -->
+<style>
+:root{--glass:rgba(18,18,21,.86);--solid:rgba(14,14,17,.97);--card:rgba(255,255,255,.08);--card-h:rgba(255,255,255,.16);--ink:#fff;--muted:#b4b6be;--btn:rgba(255,255,255,.1);--on:#fff;--on-ink:#17171a;--red:#ff4d5a;--ok:#4ade80;--bad:#ff6b6b;--comum:#9aa0a8;--raro:#5aa9ff;--epico:#b678ff}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:11px;font-size:clamp(11px,min(1.15vw,2.3vh),20px);height:100%}
+body{margin:0;height:100%;overflow:hidden;background:transparent;color:var(--ink);font:500 1rem/1.35 "Bahnschrift","Segoe UI",Roboto,Arial,sans-serif;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+html.dev body{background:radial-gradient(ellipse at 50% 30%,#2b2118,#0d0a08)}
+button{font:inherit;color:inherit;cursor:pointer;border:0}
+:focus-visible{outline:.2rem solid #fff;outline-offset:.1rem}
+.cond{font-family:"Bahnschrift Condensed","Arial Narrow","Roboto Condensed",Impact,sans-serif;font-weight:700}
+::-webkit-scrollbar{width:.4rem}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.3);border-radius:1rem}
+.ui{display:flex;width:100%;max-width:96rem;height:100%;margin:0 auto;padding:1rem}
+.side{display:flex;flex-direction:column;width:5.2rem;flex:none;background:var(--glass);border-radius:1.4rem;padding:.7rem .5rem;margin-right:1rem;overflow:auto}
+.side .sp{flex:1}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:3.6rem;padding:.4rem .2rem;border-radius:1rem;background:transparent;margin-bottom:.4rem;font-size:.75rem;line-height:1.1;text-align:center;flex:none}
+.tab svg{width:1.6rem;height:1.6rem;margin-bottom:.2rem;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab:hover{background:var(--card-h)}
+.tab[aria-selected="true"]{background:var(--on);color:var(--on-ink)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;background:var(--glass);border-radius:1.4rem;padding:.8rem 1rem;margin-bottom:.8rem}
+.ttl{flex:1;min-width:0}
+.ttl h1{margin:0;font-size:1.9rem;line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.ttl p{margin:.3rem 0 0;color:var(--muted);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;justify-content:flex-end;margin:0 1rem}
+.chip{background:var(--card);border-radius:.8rem;padding:.35rem .8rem;margin-left:.5rem;font-size:.85rem;white-space:nowrap}
+.chip b{display:block;font-size:.7rem;color:var(--muted);font-weight:500}
+.chip.ok{background:rgba(74,222,128,.18);color:var(--ok)}.chip.no{background:rgba(255,107,107,.2);color:var(--bad)}
+.chip.ok b,.chip.no b{color:inherit;opacity:.8}
+.close{width:3.4rem;height:3.4rem;flex:none;border-radius:1rem;background:var(--red);display:flex;align-items:center;justify-content:center}
+.close svg{width:1.7rem;height:1.7rem;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round}
+.tools{display:flex;align-items:center;margin:0 .3rem .6rem;color:var(--muted);font-size:.9rem}
+.tools .n{flex:1}
+.tools button{background:var(--btn);border-radius:.7rem;padding:.4rem .9rem;margin-left:.4rem;min-height:2.2rem}
+.tools button[aria-pressed="true"]{background:var(--on);color:var(--on-ink)}
+.body{flex:1;min-height:0;position:relative}
+.grid{height:100%;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));grid-auto-rows:min-content;grid-gap:.9rem;padding-right:.3rem;-webkit-overflow-scrolling:touch}
+.card{background:var(--glass);border:.15rem solid transparent;border-radius:1.4rem;overflow:hidden;text-align:left;display:block;width:100%;padding:0 0 .8rem}
+.card:hover{background:rgba(50,50,56,.92)}
+.stage{display:block;height:8rem;border-radius:1.3rem;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.2),rgba(255,255,255,.03) 70%)}
+.stage svg{display:block;width:100%;height:100%;padding:.4rem}
+.r-raro .stage{box-shadow:inset 0 0 0 .15rem var(--raro)}.r-epico .stage{box-shadow:inset 0 0 0 .15rem var(--epico)}
+.info{padding:.6rem .9rem 0}
+.row{display:flex;justify-content:space-between;color:var(--muted);font-size:.85rem}
+.nome{font-size:1.1rem;font-weight:600;line-height:1.15}
+.price{font-size:2.1rem;line-height:1.05;text-transform:uppercase}
+.specs{display:flex;flex-wrap:wrap;font-size:.8rem;margin-top:.2rem}
+.specs span{background:var(--card);border-radius:.5rem;padding:.1rem .5rem;margin:0 .3rem .3rem 0}
+.specs .rar-comum{color:var(--comum)}.specs .rar-raro{color:var(--raro)}.specs .rar-epico{color:var(--epico)}
+.specs .st{background:var(--on);color:var(--on-ink);font-weight:600}
+.sheet{display:none;position:absolute;left:0;right:0;top:0;bottom:0;background:var(--solid);border-radius:1.4rem;padding:1rem;overflow-y:auto;z-index:2;-webkit-overflow-scrolling:touch}
+.sheet.on{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-gap:1.2rem;align-content:start}
+.sheet .stage{height:12rem;border-radius:1.1rem}
+.sbtn{background:var(--btn);border-radius:.8rem;padding:.55rem 1rem;margin-bottom:.7rem;min-height:2.6rem}
+.no{color:var(--muted);font-size:.9rem}
+.dtitle{font-size:2rem;text-transform:uppercase;line-height:1}
+.dprice{font-size:3rem;line-height:1.05;margin:.2rem 0 0}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);grid-gap:.5rem;margin:.8rem 0 0}
+.facts div{background:var(--card);border-radius:.8rem;padding:.5rem .7rem;font-size:.95rem}
+.facts b{display:block;font-size:.72rem;color:var(--muted);font-weight:500}
+.about{margin:.8rem 0 0;padding:.7rem .9rem;background:var(--card);border-radius:.8rem;color:var(--muted);font-size:.9rem}
+.sec{font-size:.78rem;color:var(--muted);margin:.9rem 0 .4rem;text-transform:uppercase;letter-spacing:.07em}
+.sec:first-child{margin-top:0}
+.sw{display:flex;flex-wrap:wrap;align-items:center}
+.sw button{width:2.6rem;height:2.6rem;border-radius:50%;margin:0 .5rem .3rem 0;border:.2rem solid rgba(255,255,255,.25)}
+.sw button[aria-pressed="true"]{border-color:#fff;box-shadow:0 0 0 .2rem rgba(255,255,255,.35)}
+.sw span{margin-left:.3rem;color:var(--muted)}
+.seg{display:grid;grid-template-columns:1fr 1fr;grid-gap:.5rem}
+.seg button{border:.15rem solid transparent;background:var(--btn);border-radius:.8rem;padding:.6rem .8rem;text-align:left;min-height:3.4rem}
+.seg button[aria-pressed="true"]{border-color:#fff;background:var(--card-h)}
+.seg small{display:block;color:var(--muted);font-size:.8rem}
+.req{list-style:none;margin:0;padding:0}
+.req li{display:flex;align-items:flex-start;padding:.5rem .8rem;border-radius:.8rem;background:var(--card);margin-bottom:.4rem}
+.req li i{font-style:normal;font-weight:700;width:1.6rem;flex:none}
+.req li.ok i{color:var(--ok)}.req li.no i{color:var(--bad)}
+.req small{display:block;color:var(--muted);font-size:.85rem}
+.acts{display:grid;grid-template-columns:1fr 2fr;grid-gap:.6rem;margin-top:.6rem}
+.acts button{border-radius:1rem;padding:.9rem;font-size:1.6rem;text-transform:uppercase}
+.try{background:var(--btn)}
+.buy{background:var(--on);color:var(--on-ink)}
+.acts button:disabled{opacity:.35}
+.warn{color:var(--bad);margin:.4rem .2rem 0;font-size:.9rem}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:flex;align-items:flex-start;background:var(--card);border-radius:.8rem;padding:.6rem .8rem;margin-bottom:.4rem}
+.steps li::before{content:counter(s);flex:none;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--on);color:var(--on-ink);text-align:center;line-height:1.6rem;font-weight:700;margin-right:.7rem}
+.legend{display:flex;flex-wrap:wrap;color:var(--muted);font-size:.9rem}.legend span{margin-right:1rem;margin-bottom:.3rem}
+#toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);padding:.6rem 1.1rem;border-radius:.9rem;opacity:0;pointer-events:none;z-index:9;max-width:90%}
+#toast.on{opacity:1}
+.devbar{display:none;position:fixed;bottom:.4rem;left:.4rem;background:rgba(0,0,0,.7);padding:.3rem .6rem;border-radius:.5rem;font-size:.75rem;z-index:9}
+html.dev .devbar{display:block}
+.rotate{display:none;position:fixed;left:0;right:0;top:0;bottom:0;background:#000;color:#fff;z-index:99;align-items:center;justify-content:center;text-align:center;padding:2rem;font-size:1.3rem}
+@media (orientation:portrait) and (max-width:820px){.rotate{display:flex}.ui{display:none}}
+@media (max-height:420px){.stage{height:6rem}.price{font-size:1.7rem}.sheet .stage{height:8rem}.dprice{font-size:2.4rem}.tab{min-height:3rem}.tab svg{width:1.3rem;height:1.3rem}}
+@media (max-width:720px){.chips{display:none}.sheet.on{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="devbar"><label><input type="checkbox" id="devcef" checked> Simular conta CEF habilitada (só no navegador)</label></div>
+<div class="rotate">Gire o aparelho para a horizontal para usar o menu de acessórios.</div>
+<div class="ui" id="ui">
+  <nav class="side" role="tablist" aria-label="Categorias" id="side"></nav>
+  <section class="main">
+    <header class="top">
+      <div class="ttl"><h1 class="cond" id="titulo"></h1><p id="desc"></p></div>
+      <div class="chips">
+        <span class="chip"><b>Jogador</b><span id="cNome">-</span></span>
+        <span class="chip"><b>Dinheiro</b><span id="cDin">-</span></span>
+        <span class="chip"><b>Banco CEF</b><span id="cBan">-</span></span>
+        <span class="chip" id="cSlotBox"><b>Vagas de acessório</b><span id="cSlot">-</span></span>
+      </div>
+      <button class="close" id="close" aria-label="Fechar menu"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="tools"><span class="n" id="qtd"></span><span>Ordenar:</span>
+      <button data-s="pad" aria-pressed="true">Padrão</button><button data-s="asc" aria-pressed="false">Menor preço</button><button data-s="desc" aria-pressed="false">Maior preço</button>
+    </div>
+    <div class="body"><div class="grid" id="grid"></div><div class="sheet" id="sheet" role="dialog" aria-label="Detalhes"></div></div>
+  </section>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+/* ===== 1. Ponte com o jogo (CEF) =====
+   ENVIA:   acessorios:buy(id, cor, pagamento['dinheiro'|'cef'])   acessorios:preview(id, cor)   acessorios:close()
+   RECEBE:  acessorios:data(json)   acessorios:result(ok, mensagem)
+   data = { player:{nome,dinheiro,banco,cef,nivel,slots,slotsMax}, itens:[{id,cat,forma,nome,preco,rar,nivel,estoque,cores:[],desc,possui}] }
+   cat: cabeca|rosto|costas|pulso|pescoco   forma: bone|chapeu|oculos|mascara|mochila|bolsa|relogio|pulseira|corrente|cordao
+   rar: comum|raro|epico   cores: nomes da paleta (preto, branco...) ou hex #rrggbb */
+var IN_CEF=!!(window.cef&&window.cef.emit);
+if(!IN_CEF)document.documentElement.className+=' dev';
+function emit(){var a=[].slice.call(arguments);if(IN_CEF){window.cef.emit.apply(window.cef,a)}else{console.log('[cef.emit]',a)}}
+function focus(v){try{if(window.cef&&window.cef.set_focus)window.cef.set_focus(v)}catch(e){}}
+
+/* ===== 2. Dados (exemplo) ===== */
+var player={nome:'Jogador_Exemplo',dinheiro:12000,banco:85000,cef:true,nivel:8,slots:2,slotsMax:5};
+var PAL={preto:'#2a2d33',branco:'#eceff2',vermelho:'#d94a4a',azul:'#3a6fd8',verde:'#3a9a5b',ouro:'#d4a017',prata:'#c0c6cc',marrom:'#7a4b2a',cinza:'#7c828a'};
+var CATS=[
+ {k:'cabeca',n:'Cabeça',t:'Bonés e chapéus',ic:'<path d="M4 15c0-5 4-9 9-9s7 4 7 9H4zM14 15h8"/>'},
+ {k:'rosto',n:'Rosto',t:'Óculos e máscaras',ic:'<circle cx="7" cy="13" r="3.5"/><circle cx="17" cy="13" r="3.5"/><path d="M10.5 13h3"/>'},
+ {k:'costas',n:'Costas',t:'Mochilas e bolsas',ic:'<rect x="6" y="6" width="12" height="15" rx="4"/><path d="M9 6V4h6v2M9 14h6"/>'},
+ {k:'pulso',n:'Pulso',t:'Relógios e pulseiras',ic:'<rect x="8" y="7" width="8" height="10" rx="2"/><path d="M9 7l1-4h4l1 4M9 17l1 4h4l1-4"/>'},
+ {k:'pescoco',n:'Pescoço',t:'Correntes e cordões',ic:'<path d="M4 5c0 8 4 12 8 12s8-4 8-12"/><circle cx="12" cy="19" r="2"/>'}
+];
+var ITENS=[
+ [101,'cabeca','bone','Boné Street',1800,'comum',1,25,['preto','vermelho','azul'],'Boné de aba curva para o dia a dia.'],
+ [102,'cabeca','chapeu','Chapéu Panamá',4500,'raro',5,8,['branco','marrom'],'Chapéu leve, ótimo para o calor.'],
+ [103,'cabeca','bone','Boné Aba Reta',2200,'comum',1,18,['preto','branco','verde'],'Estilo urbano com aba reta.'],
+ [104,'cabeca','chapeu','Chapéu Cowboy',12000,'epico',12,3,['marrom','preto'],'Peça exclusiva de couro.'],
+ [111,'rosto','oculos','Óculos Aviador',3200,'raro',3,14,['ouro','prata','preto'],'Lentes escuras com armação metálica.'],
+ [112,'rosto','mascara','Máscara Tática',5800,'raro',8,6,['preto','cinza'],'Cobre nariz e boca.'],
+ [113,'rosto','oculos','Óculos Esportivo',2600,'comum',1,20,['preto','azul','vermelho'],'Armação leve e resistente.'],
+ [114,'rosto','mascara','Máscara Preta',1400,'comum',1,30,['preto'],'Máscara simples de tecido.'],
+ [121,'costas','mochila','Mochila Trilha',6400,'raro',6,10,['verde','preto','cinza'],'Espaço extra e alças reforçadas.'],
+ [122,'costas','bolsa','Bolsa Transversal',3900,'comum',2,12,['marrom','preto'],'Compacta, fica ao lado do corpo.'],
+ [123,'costas','mochila','Mochila Escolar',2400,'comum',1,22,['azul','vermelho','preto'],'Clássica, para o dia a dia.'],
+ [131,'pulso','relogio','Relógio Clássico',9800,'epico',10,4,['prata','ouro'],'Caixa de aço com mostrador escuro.'],
+ [132,'pulso','relogio','Relógio Esportivo',4200,'raro',4,9,['preto','vermelho','azul'],'Resistente a impactos.'],
+ [133,'pulso','pulseira','Pulseira de Couro',1600,'comum',1,0,['marrom','preto'],'Pulseira simples e discreta.'],
+ [141,'pescoco','corrente','Corrente Prata',5200,'raro',5,7,['prata'],'Elos grossos com pingente redondo.'],
+ [142,'pescoco','corrente','Corrente Ouro',18500,'epico',15,2,['ouro'],'Ouro maciço. Peça rara.'],
+ [143,'pescoco','cordao','Cordão com Pingente',2900,'comum',2,15,['preto','marrom'],'Cordão fino com pingente em losango.']
+].map(function(r){return{id:r[0],cat:r[1],forma:r[2],nome:r[3],preco:r[4],rar:r[5],nivel:r[6],estoque:r[7],cores:r[8],desc:r[9],possui:r[0]===132}});
+
+/* ===== 3. Utilidades ===== */
+var RARN={comum:'Comum',raro:'Raro',epico:'Épico'};
+function $(id){return document.getElementById(id)}
+function brl(n){return 'R$ '+Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function hex(k){return PAL[k]||k}
+function shade(h,a){var n=parseInt(h.slice(1),16);function c(x){return Math.max(0,Math.min(255,x))}return 'rgb('+c((n>>16)+a)+','+c(((n>>8)&255)+a)+','+c((n&255)+a)+')'}
+function icon(f,col){var d=shade(col,-45),l=shade(col,45);
+ var s={
+ bone:'<path d="M28 58C28 34 44 22 60 22s32 12 32 36z" fill="'+col+'"/><path d="M58 58h44c0 8-16 10-44 6z" fill="'+d+'"/><circle cx="60" cy="22" r="4" fill="'+d+'"/><path d="M60 24v34" stroke="'+d+'" stroke-width="2"/>',
+ chapeu:'<ellipse cx="60" cy="58" rx="46" ry="10" fill="'+d+'"/><path d="M36 58c0-24 10-34 24-34s24 10 24 34z" fill="'+col+'"/><rect x="36" y="48" width="48" height="8" fill="'+d+'"/>',
+ oculos:'<rect x="16" y="34" width="36" height="26" rx="10" fill="#1b2430" stroke="'+col+'" stroke-width="5"/><rect x="68" y="34" width="36" height="26" rx="10" fill="#1b2430" stroke="'+col+'" stroke-width="5"/><path d="M52 44h16M16 42l-8-4M104 42l8-4" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>',
+ mascara:'<path d="M20 34c14-8 66-8 80 0v22c-6 16-24 24-40 24s-34-8-40-24z" fill="'+col+'"/><path d="M34 50h52M34 60h52M34 70h52" stroke="'+d+'" stroke-width="2"/><path d="M20 40h-10M100 40h10" stroke="'+d+'" stroke-width="4" stroke-linecap="round"/>',
+ mochila:'<rect x="34" y="20" width="52" height="64" rx="18" fill="'+col+'"/><rect x="42" y="50" width="36" height="26" rx="8" fill="'+d+'"/><path d="M50 20v-6h20v6M42 62h36" stroke="'+l+'" stroke-width="3" fill="none"/>',
+ bolsa:'<path d="M20 30h80l-6 44H26z" fill="'+col+'"/><path d="M42 30c0-16 36-16 36 0" stroke="'+d+'" stroke-width="5" fill="none"/><rect x="54" y="46" width="12" height="10" rx="2" fill="'+l+'"/>',
+ relogio:'<rect x="46" y="4" width="28" height="30" fill="'+d+'"/><rect x="46" y="56" width="28" height="30" fill="'+d+'"/><circle cx="60" cy="45" r="24" fill="'+col+'" stroke="'+l+'" stroke-width="3"/><circle cx="60" cy="45" r="18" fill="#101418"/><path d="M60 45V33M60 45l9 5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+ pulseira:'<ellipse cx="60" cy="45" rx="38" ry="26" fill="none" stroke="'+col+'" stroke-width="12"/><rect x="52" y="17" width="16" height="10" rx="3" fill="'+l+'"/>',
+ corrente:'<path d="M22 14c0 40 16 56 38 56s38-16 38-56" fill="none" stroke="'+col+'" stroke-width="5" stroke-dasharray="7 3" stroke-linecap="round"/><circle cx="60" cy="72" r="9" fill="'+col+'" stroke="'+l+'" stroke-width="2"/>',
+ cordao:'<path d="M22 14c0 36 16 48 38 48s38-12 38-48" fill="none" stroke="'+d+'" stroke-width="4"/><path d="M60 62l10 12-10 12-10-12z" fill="'+col+'" stroke="'+l+'" stroke-width="2"/>'};
+ return '<div class="stage"><svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid meet" aria-hidden="true">'+s[f]+'</svg></div>'}
+function say(m){var t=$('toast');t.textContent=m;t.className='on';clearTimeout(say.t);say.t=setTimeout(function(){t.className=''},2800)}
+
+/* ===== 4. Estado ===== */
+var grid=$('grid'),sheet=$('sheet'),side=$('side');
+var cur='cabeca',sel=null,cor=null,pay='dinheiro',sort='pad',view='list';
+side.innerHTML='<button class="tab" id="back" aria-label="Voltar"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</button><span class="sp"></span>'+
+ CATS.map(function(c){return '<button class="tab" role="tab" data-t="'+c.k+'"><svg viewBox="0 0 24 24">'+c.ic+'</svg>'+c.n+'</button>'}).join('')+
+ '<span class="sp"></span><button class="tab" id="help" aria-label="Como comprar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>Ajuda</button>';
+var tabs=[].slice.call(side.querySelectorAll('[role=tab]'));
+function drawPlayer(){$('cNome').textContent=(player.nome||'-')+' · Nv '+(player.nivel||1);$('cDin').textContent=brl(player.dinheiro||0);
+ $('cBan').textContent=player.cef?brl(player.banco||0):'Sem conta';
+ $('cSlot').textContent=player.slots+'/'+player.slotsMax+' em uso';$('cSlotBox').className='chip '+(player.slots<player.slotsMax?'ok':'no')}
+
+/* ===== 5. Lista ===== */
+function sorted(){var l=ITENS.filter(function(i){return i.cat===cur});if(sort==='asc')l.sort(function(a,b){return a.preco-b.preco});if(sort==='desc')l.sort(function(a,b){return b.preco-a.preco});return l}
+function show(k){if(k)cur=k;closeSheet();var c=CATS.filter(function(x){return x.k===cur})[0],l=sorted();
+ tabs.forEach(function(t){t.setAttribute('aria-selected',t.getAttribute('data-t')===cur)});
+ $('titulo').textContent=c.t;$('desc').textContent='Cada acessório ocupa 1 vaga. Use Provar para ver no seu personagem antes de comprar.';
+ $('qtd').textContent=l.length+' acessórios nesta categoria';
+ grid._l=l;grid.innerHTML=l.map(function(a,n){var out=a.estoque<=0;
+  return '<button class="card r-'+a.rar+'" data-n="'+n+'">'+icon(a.forma,hex(a.cores[0]))+'<div class="info"><div class="row"><span>'+c.n+'</span><span>'+a.cores.length+' cor(es)</span></div><div class="nome">'+a.nome+'</div><div class="price cond">'+brl(a.preco)+'</div><div class="specs"><span class="rar-'+a.rar+'">'+RARN[a.rar]+'</span><span>Nível '+a.nivel+'</span>'+(a.possui?'<span class="st">Você possui</span>':(out?'<span class="st">Esgotado</span>':'<span>Estoque '+a.estoque+'</span>'))+'</div></div></button>'}).join('')}
+grid.addEventListener('click',function(e){var b=e.target;while(b&&b!==grid&&!/\bcard\b/.test(b.className))b=b.parentNode;if(b&&b!==grid)openDetail(grid._l[b.getAttribute('data-n')])});
+
+/* ===== 6. Detalhe de compra ===== */
+function openSheet(){sheet.className='sheet on';grid.style.visibility='hidden'}
+function closeSheet(){sel=null;view='list';sheet.className='sheet';grid.style.visibility='visible'}
+function openDetail(a){sel=a;cor=a.cores[0];pay='dinheiro';view='detail';drawDetail();openSheet()}
+function drawDetail(){
+ var a=sel,c=CATS.filter(function(x){return x.k===a.cat})[0];
+ var saldo=pay==='cef'?(player.banco||0):(player.dinheiro||0);
+ var okPay=pay==='cef'?!!player.cef:true,okSaldo=okPay&&saldo>=a.preco,okNivel=player.nivel>=a.nivel,okSlot=player.slots<player.slotsMax,okEst=a.estoque>0,livre=!a.possui;
+ var ok=okSaldo&&okNivel&&okSlot&&okEst&&livre;
+ var li=function(g,t,s){return '<li class="'+(g?'ok':'no')+'"><i>'+(g?'✓':'✕')+'</i><span>'+t+(s?'<small>'+s+'</small>':'')+'</span></li>'};
+ sheet.innerHTML=
+ '<div><button class="sbtn" id="dback">← Voltar à lista</button>'+icon(a.forma,hex(cor))+
+ '<div class="facts"><div><b>Categoria</b>'+c.n+'</div><div><b>Raridade</b>'+RARN[a.rar]+'</div><div><b>Nível mínimo</b>'+a.nivel+'</div><div><b>Estoque</b>'+a.estoque+' un.</div><div><b>Vagas usadas</b>1</div><div><b>Cores</b>'+a.cores.length+'</div></div>'+
+ '<p class="about">'+a.desc+'</p></div>'+
+ '<div><div class="no">'+c.n+' · Cód. '+a.id+'</div><div class="dtitle cond">'+a.nome+'</div><div class="dprice cond">'+brl(a.preco)+'</div>'+
+ '<div class="sec">Cor</div><div class="sw">'+a.cores.map(function(k){return '<button data-c="'+k+'" title="'+k+'" aria-label="'+k+'" aria-pressed="'+(k===cor)+'" style="background:'+hex(k)+'"></button>'}).join('')+'<span>'+cor+'</span></div>'+
+ '<div class="sec">Forma de pagamento</div><div class="seg"><button data-p="dinheiro" aria-pressed="'+(pay==='dinheiro')+'">Dinheiro<small>Você tem '+brl(player.dinheiro)+'</small></button><button data-p="cef" aria-pressed="'+(pay==='cef')+'">Cartão CEF<small>'+(player.cef?'Saldo '+brl(player.banco):'Conta não habilitada')+'</small></button></div>'+
+ '<div class="sec">Requisitos para comprar</div><ul class="req">'+
+ (pay==='cef'?li(okPay,'Conta CEF habilitada',okPay?'Cartão ativo':'Procure a agência CEF para habilitar. Ou pague em dinheiro.'):'')+
+ li(okSaldo,'Saldo suficiente',okSaldo?'Você paga '+brl(a.preco)+' agora':(okPay?'Faltam '+brl(a.preco-saldo):'Pagamento indisponível'))+
+ li(okNivel,'Nível '+a.nivel+' ou mais',okNivel?'':'Seu nível é '+player.nivel)+
+ li(okSlot,'Vaga de acessório livre',okSlot?player.slots+' de '+player.slotsMax+' em uso':'Remova um acessório para liberar vaga')+
+ li(okEst,'Em estoque',okEst?'':'Este item está esgotado')+
+ (livre?'':li(false,'Você já possui este acessório',''))+'</ul>'+
+ '<div class="acts"><button class="try cond" id="try">Provar</button><button class="buy cond" id="buy"'+(ok?'':' disabled')+'>Comprar</button></div>'+
+ (ok?'':'<div class="warn">Compra bloqueada: confira os requisitos acima.</div>')+'</div>';
+ $('dback').onclick=closeSheet;
+ var cs=sheet.querySelectorAll('[data-c]');for(var i=0;i<cs.length;i++)cs[i].onclick=function(){cor=this.getAttribute('data-c');drawDetail()};
+ var ps=sheet.querySelectorAll('[data-p]');for(var j=0;j<ps.length;j++)ps[j].onclick=function(){pay=this.getAttribute('data-p');drawDetail()};
+ $('try').onclick=function(){emit('acessorios:preview',a.id,cor);say('Provando '+a.nome+' ('+cor+')')};
+ $('buy').onclick=function(){if(!ok)return;emit('acessorios:buy',a.id,cor,pay);say('Pedido de compra enviado: '+a.nome)}}
+
+/* ===== 7. Ajuda ===== */
+function drawHelp(){view='help';sel=null;
+ sheet.innerHTML='<div><button class="sbtn" id="dback">← Voltar à lista</button><div class="sec">Como comprar</div><ol class="steps"><li><span>Escolha a categoria na barra lateral.</span></li><li><span>Toque no acessório e escolha a cor.</span></li><li><span>Use Provar para ver no seu personagem.</span></li><li><span>Escolha pagar em dinheiro ou com o cartão CEF e confira os requisitos.</span></li><li><span>Toque em Comprar. O acessório vai para o seu inventário.</span></li></ol></div>'+
+ '<div><div class="sec">Vagas de acessório</div><p class="about" style="margin-top:0">Você tem um número limitado de vagas. Cada acessório ocupa 1 vaga, e o topo da tela mostra quantas estão em uso.</p>'+
+ '<div class="sec">Cartão CEF</div><p class="about" style="margin-top:0">Para pagar com o cartão você precisa de conta CEF habilitada. Sem ela, pague em dinheiro.</p>'+
+ '<div class="sec">Raridade</div><div class="legend"><span style="color:var(--comum)"><b>Comum</b>: fácil de achar</span><span style="color:var(--raro)"><b>Raro</b>: estoque menor</span><span style="color:var(--epico)"><b>Épico</b>: exige nível alto</span></div></div>';
+ $('dback').onclick=closeSheet;openSheet()}
+
+/* ===== 8. Navegação ===== */
+tabs.forEach(function(t){t.onclick=function(){show(t.getAttribute('data-t'))}});
+$('back').onclick=function(){view==='list'?show('cabeca'):closeSheet()};
+$('help').onclick=drawHelp;
+[].forEach.call(document.querySelectorAll('[data-s]'),function(b){b.onclick=function(){sort=b.getAttribute('data-s');[].forEach.call(document.querySelectorAll('[data-s]'),function(x){x.setAttribute('aria-pressed',x===b)});show()}});
+$('close').onclick=function(){emit('acessorios:close');focus(false);if(!IN_CEF)say('No jogo, isto fecha o painel.')};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.keyCode===27){view==='list'?$('close').click():closeSheet()}});
+document.addEventListener('contextmenu',function(e){e.preventDefault()});
+$('devcef').onchange=function(){player.cef=this.checked;drawPlayer();if(view==='detail')drawDetail()};
+
+/* ===== 9. Eventos do servidor ===== */
+if(IN_CEF){
+ window.cef.on('acessorios:data',function(j){var d=typeof j==='string'?JSON.parse(j):j;
+  if(d.player)player=d.player;if(d.itens)ITENS=d.itens;drawPlayer();show()});
+ window.cef.on('acessorios:result',function(ok,msg){say(msg);if(ok)closeSheet()});
+ focus(true);
+}
+drawPlayer();show('cabeca');
+})();
+</script>
+</body>
+</html>
